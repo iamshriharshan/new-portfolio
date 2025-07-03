@@ -13,6 +13,8 @@ import {
   Search,
   Settings
 } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
+import { useStaggeredReveal } from '../hooks/useScrollReveal';
 
 const About: React.FC = () => {
   const coreSkills = [
@@ -89,27 +91,37 @@ const About: React.FC = () => {
     }
   ];
 
+  const { containerRef: coreSkillsRef, visibleItems: coreSkillsVisible } = useStaggeredReveal(coreSkills.length, 150);
+  const { containerRef: detailedSkillsRef, visibleItems: detailedSkillsVisible } = useStaggeredReveal(detailedSkills.length, 100);
+
   return (
     <section id="about" className="py-16 sm:py-20 relative">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Centered Content */}
         <div className="max-w-6xl mx-auto text-center">
-          <div className="mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              About Me
-            </h2>
-            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
-              I'm a passionate technologist who loves pushing the boundaries of what's possible. 
-              With expertise spanning multiple domains, I create solutions that are both innovative and practical.
-            </p>
-          </div>
+          <ScrollReveal direction="up" delay={200}>
+            <div className="mb-12 sm:mb-16">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+                About Me
+              </h2>
+              <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed px-4 sm:px-0">
+                I'm a passionate technologist who loves pushing the boundaries of what's possible. 
+                With expertise spanning multiple domains, I create solutions that are both innovative and practical.
+              </p>
+            </div>
+          </ScrollReveal>
 
           {/* Core Skills Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-16 sm:mb-20">
+          <div ref={coreSkillsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-16 sm:mb-20">
             {coreSkills.map((skill, index) => (
               <div
                 key={index}
                 className="bg-slate-800/30 backdrop-blur-lg border border-slate-700/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 hover:bg-slate-700/40 hover:border-slate-600/70 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 group"
+                style={{
+                  opacity: coreSkillsVisible[index] ? 1 : 0,
+                  transform: `translateY(${coreSkillsVisible[index] ? 0 : 50}px) scale(${coreSkillsVisible[index] ? 1 : 0.9})`,
+                  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }}
               >
                 <div className="text-blue-400 mb-3 sm:mb-4 group-hover:text-slate-300 transition-colors duration-300 flex justify-center">
                   {skill.icon}
@@ -125,62 +137,71 @@ const About: React.FC = () => {
           </div>
 
           {/* Detailed Skills Section */}
-          <div className="mb-12 sm:mb-16">
-            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-8 sm:mb-12">
-              Professional Expertise
-            </h3>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-              {detailedSkills.map((skill, index) => (
-                <div
-                  key={index}
-                  className="group bg-slate-800/20 backdrop-blur-lg border border-slate-700/40 rounded-lg sm:rounded-xl p-4 sm:p-6 hover:bg-slate-700/30 hover:border-slate-600/60 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
-                >
-                  {/* Icon with Gradient Background */}
-                  <div className={`
-                    w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br ${skill.color} 
-                    flex items-center justify-center mb-3 sm:mb-4 mx-auto
-                    group-hover:scale-110 transition-transform duration-300
-                    shadow-lg group-hover:shadow-xl
-                  `}>
-                    <div className="text-white">
-                      {skill.icon}
+          <ScrollReveal direction="up" delay={400}>
+            <div className="mb-12 sm:mb-16">
+              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-8 sm:mb-12">
+                Professional Expertise
+              </h3>
+              
+              <div ref={detailedSkillsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                {detailedSkills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="group bg-slate-800/20 backdrop-blur-lg border border-slate-700/40 rounded-lg sm:rounded-xl p-4 sm:p-6 hover:bg-slate-700/30 hover:border-slate-600/60 transition-all duration-500 transform hover:scale-105 hover:-translate-y-1"
+                    style={{
+                      opacity: detailedSkillsVisible[index] ? 1 : 0,
+                      transform: `translateY(${detailedSkillsVisible[index] ? 0 : 30}px) scale(${detailedSkillsVisible[index] ? 1 : 0.95})`,
+                      transition: 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    }}
+                  >
+                    {/* Icon with Gradient Background */}
+                    <div className={`
+                      w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br ${skill.color} 
+                      flex items-center justify-center mb-3 sm:mb-4 mx-auto
+                      group-hover:scale-110 transition-transform duration-300
+                      shadow-lg group-hover:shadow-xl
+                    `}>
+                      <div className="text-white">
+                        {skill.icon}
+                      </div>
                     </div>
+                    
+                    {/* Skill Title */}
+                    <h4 className="text-base sm:text-lg font-semibold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300 text-center">
+                      {skill.category}
+                    </h4>
+                    
+                    {/* Skill Description */}
+                    <p className="text-slate-400 text-xs sm:text-sm leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-center">
+                      {skill.description}
+                    </p>
+                    
+                    {/* Hover Accent Line */}
+                    <div className={`
+                      w-0 h-0.5 bg-gradient-to-r ${skill.color} mx-auto mt-3 sm:mt-4
+                      group-hover:w-full transition-all duration-500
+                    `} />
                   </div>
-                  
-                  {/* Skill Title */}
-                  <h4 className="text-base sm:text-lg font-semibold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300 text-center">
-                    {skill.category}
-                  </h4>
-                  
-                  {/* Skill Description */}
-                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-center">
-                    {skill.description}
-                  </p>
-                  
-                  {/* Hover Accent Line */}
-                  <div className={`
-                    w-0 h-0.5 bg-gradient-to-r ${skill.color} mx-auto mt-3 sm:mt-4
-                    group-hover:w-full transition-all duration-500
-                  `} />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Call to Action */}
-          <div className="bg-gradient-to-r from-slate-800/40 to-gray-800/40 backdrop-blur-lg border border-slate-700/50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 hover:from-slate-700/50 hover:to-gray-700/50 transition-all duration-500">
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
-                Let's Build Something Powerful Together
-              </h3>
-              <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-4xl mx-auto px-4 sm:px-0">
-                I believe in the power of technology to solve real-world problems. 
-                Whether it's creating stunning 3D visualizations, developing intelligent systems, 
-                building robust web applications, or securing digital infrastructure, I'm always excited to take on new challenges.
-              </p>
+          <ScrollReveal direction="up" delay={600}>
+            <div className="bg-gradient-to-r from-slate-800/40 to-gray-800/40 backdrop-blur-lg border border-slate-700/50 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 hover:from-slate-700/50 hover:to-gray-700/50 transition-all duration-500">
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
+                  Let's Build Something Powerful Together
+                </h3>
+                <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-4xl mx-auto px-4 sm:px-0">
+                  I believe in the power of technology to solve real-world problems. 
+                  Whether it's creating stunning 3D visualizations, developing intelligent systems, 
+                  building robust web applications, or securing digital infrastructure, I'm always excited to take on new challenges.
+                </p>
+              </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

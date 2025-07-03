@@ -1,5 +1,7 @@
 import React from 'react';
 import { Calendar, MapPin, Award, Briefcase, Trophy, Star, Users, Target, Shield, Search, Brain, Palette } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
+import { useStaggeredReveal } from '../hooks/useScrollReveal';
 
 const Experience: React.FC = () => {
   const experiences = [
@@ -112,137 +114,154 @@ const Experience: React.FC = () => {
     }
   ];
 
+  const { containerRef: timelineRef, visibleItems: timelineVisible } = useStaggeredReveal(experiences.length, 300);
+  const { containerRef: achievementsRef, visibleItems: achievementsVisible } = useStaggeredReveal(achievements.length, 200);
+
   return (
     <section id="experience" className="py-16 sm:py-20 relative">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Centered Content */}
         <div className="max-w-6xl mx-auto">
-          <div className="mb-12 sm:mb-16 text-center">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              Professional Experience
-            </h2>
-            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto px-4 sm:px-0">
-              My professional journey showcasing growth in cybersecurity, machine learning, and development.
-            </p>
-          </div>
+          <ScrollReveal direction="up" delay={200}>
+            <div className="mb-12 sm:mb-16 text-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+                Professional Experience
+              </h2>
+              <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto px-4 sm:px-0">
+                My professional journey showcasing growth in cybersecurity, machine learning, and development.
+              </p>
+            </div>
+          </ScrollReveal>
 
           {/* Experience Timeline */}
           <div className="relative mb-16 sm:mb-20">
-            {/* Central Timeline Line - Hidden on mobile, visible on desktop */}
-            <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-600 via-blue-600 via-purple-600 to-cyan-600 rounded-full opacity-30" />
+            {/* Central Timeline Line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 via-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-30 hidden lg:block" />
             
-            {/* Mobile Timeline Line - Left side */}
-            <div className="lg:hidden absolute left-6 top-0 w-0.5 h-full bg-gradient-to-b from-red-600 via-blue-600 via-purple-600 to-cyan-600 rounded-full opacity-30" />
+            {/* Mobile Timeline Line */}
+            <div className="absolute left-8 top-0 w-0.5 h-full bg-gradient-to-b from-red-500 via-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-30 lg:hidden" />
             
             {/* Timeline Items */}
-            <div className="space-y-8 sm:space-y-12">
+            <div ref={timelineRef} className="space-y-12 sm:space-y-16">
               {experiences.map((item, index) => {
                 const isLeft = index % 2 === 0;
                 
                 return (
-                  <div key={index} className="relative flex items-center">
+                  <div 
+                    key={index} 
+                    className="relative flex items-center"
+                    style={{
+                      opacity: timelineVisible[index] ? 1 : 0,
+                      transform: `translateY(${timelineVisible[index] ? 0 : 50}px)`,
+                      transition: 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    }}
+                  >
                     {/* Timeline Node */}
                     <div className={`absolute ${
-                      // Mobile: left side, Desktop: center
-                      'lg:left-1/2 lg:transform lg:-translate-x-1/2 left-6 transform -translate-x-1/2'
+                      'lg:left-1/2 lg:transform lg:-translate-x-1/2 left-8 transform -translate-x-1/2'
                     } z-10`}>
                       <div className={`
-                        w-10 h-10 sm:w-12 sm:h-12 rounded-full border-4 border-slate-800 
+                        w-12 h-12 sm:w-14 sm:h-14 rounded-full border-4 border-slate-800 
                         bg-gradient-to-br ${item.color} 
-                        flex items-center justify-center shadow-lg
+                        flex items-center justify-center shadow-xl
                         hover:scale-110 transition-transform duration-300
+                        relative
                       `}>
                         <div className="text-white">
                           {item.icon}
                         </div>
+                        {/* Pulse animation */}
+                        <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${item.color} animate-ping opacity-20`} />
                       </div>
                     </div>
 
                     {/* Content Card */}
                     <div className={`
                       w-full flex ${
-                        // Mobile: always left aligned, Desktop: alternating
                         'lg:' + (isLeft ? 'justify-start pr-8' : 'justify-end pl-8')
-                      } justify-start pl-16 sm:pl-20
+                      } justify-start pl-20 sm:pl-24
                     `}>
                       <div className={`
                         w-full ${
-                          // Mobile: full width, Desktop: limited width with margin
-                          'lg:max-w-lg lg:' + (isLeft ? 'mr-8' : 'ml-8')
+                          'lg:max-w-lg lg:' + (isLeft ? 'mr-12' : 'ml-12')
                         }
                       `}>
                         <div className={`
-                          relative bg-slate-800/40 backdrop-blur-lg border border-slate-700/50 
-                          rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:bg-slate-700/50 hover:border-slate-600/70 
+                          relative bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-lg 
+                          border border-slate-700/50 rounded-2xl p-6 sm:p-8 
+                          hover:from-slate-700/70 hover:to-slate-800/70 hover:border-slate-600/70 
                           transition-all duration-500 transform hover:scale-105 
                           ${
-                            // Mobile: no translation, Desktop: alternating translation
                             'lg:' + (isLeft ? 'hover:-translate-x-2' : 'hover:translate-x-2')
                           }
-                          group
+                          group shadow-xl hover:shadow-2xl
                         `}>
-                          {/* Card Arrow - Hidden on mobile, visible on desktop */}
+                          {/* Card Arrow */}
                           <div className={`
-                            hidden lg:block absolute top-6 ${isLeft ? '-right-3' : '-left-3'} 
-                            w-6 h-6 bg-slate-800/40 border-r border-b border-slate-700/50 
-                            transform rotate-45 group-hover:bg-slate-700/50
+                            hidden lg:block absolute top-8 ${isLeft ? '-right-4' : '-left-4'} 
+                            w-8 h-8 bg-gradient-to-br from-slate-800/60 to-slate-900/60 
+                            border-r border-b border-slate-700/50 
+                            transform rotate-45 group-hover:from-slate-700/70 group-hover:to-slate-800/70
                             transition-colors duration-500
                           `} />
                           
                           {/* Year Badge */}
                           <div className={`
-                            absolute -top-2 sm:-top-3 ${
-                              // Mobile: right side, Desktop: alternating
-                              'lg:' + (isLeft ? 'right-4' : 'left-4') + ' right-4'
+                            absolute -top-3 sm:-top-4 ${
+                              'lg:' + (isLeft ? 'right-6' : 'left-6') + ' right-6'
                             }
-                            px-2 sm:px-3 py-1 text-xs font-bold text-white rounded-full
+                            px-3 sm:px-4 py-1 sm:py-2 text-sm font-bold text-white rounded-full
                             bg-gradient-to-r ${item.color} shadow-lg
+                            hover:scale-110 transition-transform duration-300
                           `}>
                             {item.year}
                           </div>
 
                           {/* Content */}
-                          <div className="pt-2">
+                          <div className="pt-4">
                             {/* Header */}
-                            <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-start justify-between mb-4">
                               <div className="flex-1">
-                                <h3 className="text-lg sm:text-xl font-bold text-white mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300">
+                                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300">
                                   {item.title}
                                 </h3>
-                                <div className="text-blue-400 font-semibold mb-2 group-hover:text-blue-300 transition-colors duration-300 text-sm sm:text-base">
+                                <div className="text-blue-400 font-semibold mb-3 group-hover:text-blue-300 transition-colors duration-300 text-base sm:text-lg">
                                   {item.company}
                                 </div>
                               </div>
                               
-                              <span className="text-xs px-2 py-1 rounded-full font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30 ml-2">
+                              <span className="text-xs sm:text-sm px-3 py-1 rounded-full font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30 ml-3 whitespace-nowrap">
                                 {item.jobType}
                               </span>
                             </div>
 
                             {/* Details */}
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-slate-400 text-xs sm:text-sm mb-3">
-                              <span className="flex items-center gap-1 hover:text-slate-300 transition-colors duration-300">
-                                <Calendar size={12} className="sm:w-3.5 sm:h-3.5" />
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-slate-400 text-sm mb-4">
+                              <span className="flex items-center gap-2 hover:text-slate-300 transition-colors duration-300">
+                                <Calendar size={14} />
                                 {item.period}
                               </span>
-                              <span className="flex items-center gap-1 hover:text-slate-300 transition-colors duration-300">
-                                <MapPin size={12} className="sm:w-3.5 sm:h-3.5" />
+                              <span className="flex items-center gap-2 hover:text-slate-300 transition-colors duration-300">
+                                <MapPin size={14} />
                                 {item.location}
                               </span>
                             </div>
 
                             {/* Description */}
-                            <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-sm sm:text-base mb-4">
+                            <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-sm sm:text-base mb-5">
                               {item.description}
                             </p>
 
                             {/* Key Achievements */}
-                            <div className="mb-4">
-                              <h4 className="text-sm font-semibold text-white mb-2">Key Achievements:</h4>
-                              <ul className="space-y-1">
+                            <div className="mb-5">
+                              <h4 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
+                                <Trophy className="w-4 h-4" />
+                                Key Achievements
+                              </h4>
+                              <ul className="space-y-2">
                                 {item.achievements.map((achievement, achIndex) => (
-                                  <li key={achIndex} className="text-xs sm:text-sm text-slate-400 flex items-start gap-2">
-                                    <span className="text-green-400 mt-1">•</span>
+                                  <li key={achIndex} className="text-xs sm:text-sm text-slate-400 flex items-start gap-3">
+                                    <span className="text-green-400 mt-1 flex-shrink-0">✓</span>
                                     <span className="group-hover:text-slate-300 transition-colors duration-300">{achievement}</span>
                                   </li>
                                 ))}
@@ -250,11 +269,11 @@ const Experience: React.FC = () => {
                             </div>
 
                             {/* Skills */}
-                            <div className="flex flex-wrap gap-1 sm:gap-2 mb-3">
+                            <div className="flex flex-wrap gap-2 mb-4">
                               {item.skills.map((skill, skillIndex) => (
                                 <span
                                   key={skillIndex}
-                                  className="px-2 py-1 text-xs bg-slate-700/50 text-slate-300 rounded-full border border-slate-600/50 hover:bg-slate-600/60 transition-all duration-300"
+                                  className="px-3 py-1 text-xs sm:text-sm bg-slate-700/50 text-slate-300 rounded-full border border-slate-600/50 hover:bg-slate-600/60 hover:border-slate-500/70 transition-all duration-300 hover:scale-105"
                                 >
                                   {skill}
                                 </span>
@@ -263,8 +282,8 @@ const Experience: React.FC = () => {
 
                             {/* Hover Accent */}
                             <div className={`
-                              w-0 h-0.5 bg-gradient-to-r ${item.color} mt-4
-                              group-hover:w-full transition-all duration-500
+                              w-0 h-1 bg-gradient-to-r ${item.color} mt-4 rounded-full
+                              group-hover:w-full transition-all duration-700
                             `} />
                           </div>
                         </div>
@@ -277,102 +296,113 @@ const Experience: React.FC = () => {
           </div>
 
           {/* Achievements Section */}
-          <div className="mb-12 sm:mb-16">
-            <div className="text-center mb-8 sm:mb-12">
-              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 flex items-center justify-center gap-3">
-                <Award className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" />
-                Achievements & Leadership
-              </h3>
-              <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto px-4 sm:px-0">
-                Recognition and leadership roles that showcase my commitment to community and excellence.
-              </p>
-            </div>
+          <ScrollReveal direction="up" delay={400}>
+            <div className="mb-12 sm:mb-16">
+              <div className="text-center mb-8 sm:mb-12">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 flex items-center justify-center gap-3">
+                  <Award className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" />
+                  Achievements & Leadership
+                </h3>
+                <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto px-4 sm:px-0">
+                  Recognition and leadership roles that showcase my commitment to community and excellence.
+                </p>
+              </div>
 
-            {/* Achievements Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-              {achievements.map((achievement, index) => (
-                <div
-                  key={index}
-                  className="group bg-gradient-to-br from-slate-800/40 to-gray-800/40 backdrop-blur-lg border border-slate-700/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 hover:from-slate-700/50 hover:to-gray-700/50 hover:border-slate-600/70 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2"
-                >
-                  {/* Achievement Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`
-                      w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${achievement.color} 
-                      flex items-center justify-center shadow-lg
-                      group-hover:scale-110 transition-transform duration-300
-                    `}>
-                      <div className="text-white">
-                        {achievement.icon}
-                      </div>
-                    </div>
-                    
-                    <span className="text-xs sm:text-sm px-2 sm:px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full border border-yellow-500/30 font-medium">
-                      {achievement.year}
-                    </span>
-                  </div>
-
-                  {/* Achievement Content */}
-                  <div>
-                    <h4 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300">
-                      {achievement.title}
-                    </h4>
-                    
-                    <div className="text-blue-400 font-semibold mb-3 group-hover:text-blue-300 transition-colors duration-300 text-sm sm:text-base">
-                      {achievement.organization}
-                    </div>
-                    
-                    <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-sm sm:text-base">
-                      {achievement.description}
-                    </p>
-
-                    {/* Achievement Badge */}
-                    <div className="mt-4 flex items-center gap-2">
-                      <Trophy className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400" />
-                      <span className="text-xs text-yellow-300 font-medium">Achievement</span>
-                    </div>
-
-                    {/* Hover Accent */}
-                    <div className={`
-                      w-0 h-0.5 bg-gradient-to-r ${achievement.color} mt-4
-                      group-hover:w-full transition-all duration-500
-                    `} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Skills Summary */}
-          <div className="text-center">
-            <div className="bg-gradient-to-r from-slate-800/40 to-gray-800/40 backdrop-blur-lg border border-slate-700/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 hover:from-slate-700/50 hover:to-gray-700/50 transition-all duration-300">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 hover:text-blue-300 transition-colors duration-300 flex items-center justify-center gap-3">
-                <Users className="w-5 h-5 sm:w-6 sm:h-6" />
-                Core Competencies
-              </h3>
-              <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                {[
-                  'Security Research', 
-                  'Penetration Testing', 
-                  'Machine Learning', 
-                  'Natural Language Processing', 
-                  'Python Development', 
-                  'Data Processing',
-                  'Research & Development',
-                  'Graphic Design',
-                  'Video Editing',
-                  'Community Leadership'
-                ].map((skill, index) => (
-                  <span
+              {/* Achievements Grid */}
+              <div ref={achievementsRef} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                {achievements.map((achievement, index) => (
+                  <div
                     key={index}
-                    className="px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm bg-slate-700/50 text-slate-300 rounded-full border border-slate-600/50 hover:bg-slate-600/60 hover:border-slate-500/70 hover:text-white transition-all duration-300 hover:scale-105 cursor-default"
+                    className="group bg-gradient-to-br from-slate-800/40 to-gray-800/40 backdrop-blur-lg border border-slate-700/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 hover:from-slate-700/50 hover:to-gray-700/50 hover:border-slate-600/70 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2 shadow-xl hover:shadow-2xl"
+                    style={{
+                      opacity: achievementsVisible[index] ? 1 : 0,
+                      transform: `translateY(${achievementsVisible[index] ? 0 : 30}px) scale(${achievementsVisible[index] ? 1 : 0.95})`,
+                      transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    }}
                   >
-                    {skill}
-                  </span>
+                    {/* Achievement Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`
+                        w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br ${achievement.color} 
+                        flex items-center justify-center shadow-lg
+                        group-hover:scale-110 transition-transform duration-300
+                        relative
+                      `}>
+                        <div className="text-white">
+                          {achievement.icon}
+                        </div>
+                        <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${achievement.color} animate-pulse opacity-20`} />
+                      </div>
+                      
+                      <span className="text-xs sm:text-sm px-2 sm:px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full border border-yellow-500/30 font-medium">
+                        {achievement.year}
+                      </span>
+                    </div>
+
+                    {/* Achievement Content */}
+                    <div>
+                      <h4 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300">
+                        {achievement.title}
+                      </h4>
+                      
+                      <div className="text-blue-400 font-semibold mb-3 group-hover:text-blue-300 transition-colors duration-300 text-sm sm:text-base">
+                        {achievement.organization}
+                      </div>
+                      
+                      <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-sm sm:text-base">
+                        {achievement.description}
+                      </p>
+
+                      {/* Achievement Badge */}
+                      <div className="mt-4 flex items-center gap-2">
+                        <Trophy className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400" />
+                        <span className="text-xs text-yellow-300 font-medium">Achievement</span>
+                      </div>
+
+                      {/* Hover Accent */}
+                      <div className={`
+                        w-0 h-1 bg-gradient-to-r ${achievement.color} mt-4 rounded-full
+                        group-hover:w-full transition-all duration-700
+                      `} />
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
-          </div>
+          </ScrollReveal>
+
+          {/* Skills Summary */}
+          <ScrollReveal direction="up" delay={600}>
+            <div className="text-center">
+              <div className="bg-gradient-to-r from-slate-800/40 to-gray-800/40 backdrop-blur-lg border border-slate-700/50 rounded-xl sm:rounded-2xl p-6 sm:p-8 hover:from-slate-700/50 hover:to-gray-700/50 transition-all duration-300 shadow-xl">
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 hover:text-blue-300 transition-colors duration-300 flex items-center justify-center gap-3">
+                  <Users className="w-5 h-5 sm:w-6 sm:h-6" />
+                  Core Competencies
+                </h3>
+                <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
+                  {[
+                    'Security Research', 
+                    'Penetration Testing', 
+                    'Machine Learning', 
+                    'Natural Language Processing', 
+                    'Python Development', 
+                    'Data Processing',
+                    'Research & Development',
+                    'Graphic Design',
+                    'Video Editing',
+                    'Community Leadership'
+                  ].map((skill, index) => (
+                    <span
+                      key={index}
+                      className="px-3 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm bg-slate-700/50 text-slate-300 rounded-full border border-slate-600/50 hover:bg-slate-600/60 hover:border-slate-500/70 hover:text-white transition-all duration-300 hover:scale-105 cursor-default"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

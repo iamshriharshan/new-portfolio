@@ -1,5 +1,7 @@
 import React from 'react';
 import { ExternalLink, Github, Star } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
+import { useStaggeredReveal } from '../hooks/useScrollReveal';
 
 const Projects: React.FC = () => {
   const projects = [
@@ -32,26 +34,35 @@ const Projects: React.FC = () => {
     }
   ];
 
+  const { containerRef, visibleItems } = useStaggeredReveal(projects.length, 200);
+
   return (
     <section id="projects" className="py-16 sm:py-20 relative">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Centered Content */}
         <div className="max-w-6xl mx-auto text-center">
-          <div className="mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-              Featured Projects
-            </h2>
-            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto px-4 sm:px-0">
-              A showcase of my latest work spanning browser extensions, AI-powered systems, 
-              and machine learning solutions.
-            </p>
-          </div>
+          <ScrollReveal direction="up" delay={200}>
+            <div className="mb-12 sm:mb-16">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
+                Featured Projects
+              </h2>
+              <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto px-4 sm:px-0">
+                A showcase of my latest work spanning browser extensions, AI-powered systems, 
+                and machine learning solutions.
+              </p>
+            </div>
+          </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div ref={containerRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {projects.map((project, index) => (
               <div
                 key={index}
                 className="group bg-slate-800/30 backdrop-blur-lg border border-slate-700/50 rounded-xl sm:rounded-2xl overflow-hidden hover:bg-slate-700/40 hover:border-slate-600/70 transition-all duration-500 transform hover:scale-[1.02] hover:-translate-y-2 relative"
+                style={{
+                  opacity: visibleItems[index] ? 1 : 0,
+                  transform: `translateY(${visibleItems[index] ? 0 : 50}px) scale(${visibleItems[index] ? 1 : 0.9})`,
+                  transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                }}
               >
                 {/* Featured Badge */}
                 {project.featured && (
