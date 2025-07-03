@@ -173,24 +173,26 @@ const Experience: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Content Container */}
-                    <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-12">
-                      {/* Left Side Content (for even indices) */}
-                      <div className={`${isLeft ? 'lg:order-1' : 'lg:order-2'} ${!isLeft ? 'lg:text-right' : ''}`}>
-                        {isLeft && (
-                          <div className="pl-20 lg:pl-0 lg:pr-8 xl:pr-12">
-                            <ExperienceCard item={item} isLeft={isLeft} />
-                          </div>
-                        )}
-                      </div>
+                    {/* Desktop Layout - Alternating Cards */}
+                    <div className="hidden lg:block">
+                      <div className="grid grid-cols-2 gap-8 xl:gap-16">
+                        {/* Left Side */}
+                        <div className={`${isLeft ? 'order-1' : 'order-2'} ${!isLeft ? 'opacity-0 pointer-events-none' : ''}`}>
+                          {isLeft && (
+                            <div className="pr-8 xl:pr-12">
+                              <ExperienceCard item={item} isLeft={true} />
+                            </div>
+                          )}
+                        </div>
 
-                      {/* Right Side Content (for odd indices) */}
-                      <div className={`${isLeft ? 'lg:order-2' : 'lg:order-1'} ${isLeft ? 'lg:text-left' : ''}`}>
-                        {!isLeft && (
-                          <div className="pl-20 lg:pl-8 xl:pl-12 lg:pr-0">
-                            <ExperienceCard item={item} isLeft={isLeft} />
-                          </div>
-                        )}
+                        {/* Right Side */}
+                        <div className={`${isLeft ? 'order-2' : 'order-1'} ${isLeft ? 'opacity-0 pointer-events-none' : ''}`}>
+                          {!isLeft && (
+                            <div className="pl-8 xl:pl-12">
+                              <ExperienceCard item={item} isLeft={false} />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
 
