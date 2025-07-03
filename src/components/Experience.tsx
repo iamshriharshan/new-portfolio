@@ -121,7 +121,7 @@ const Experience: React.FC = () => {
     <section id="experience" className="py-16 sm:py-20 relative">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Centered Content */}
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <ScrollReveal direction="up" delay={200}>
             <div className="mb-12 sm:mb-16 text-center">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
@@ -135,33 +135,31 @@ const Experience: React.FC = () => {
 
           {/* Experience Timeline */}
           <div className="relative mb-16 sm:mb-20">
-            {/* Central Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 via-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-30 hidden lg:block" />
+            {/* Central Timeline Line - Hidden on mobile, visible on lg+ */}
+            <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-red-500 via-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-30" />
             
-            {/* Mobile Timeline Line */}
-            <div className="absolute left-8 top-0 w-0.5 h-full bg-gradient-to-b from-red-500 via-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-30 lg:hidden" />
+            {/* Mobile Timeline Line - Visible only on mobile */}
+            <div className="lg:hidden absolute left-8 top-0 w-0.5 h-full bg-gradient-to-b from-red-500 via-blue-500 via-purple-500 to-cyan-500 rounded-full opacity-30" />
             
             {/* Timeline Items */}
-            <div ref={timelineRef} className="space-y-12 sm:space-y-16">
+            <div ref={timelineRef} className="space-y-12 sm:space-y-16 lg:space-y-20">
               {experiences.map((item, index) => {
                 const isLeft = index % 2 === 0;
                 
                 return (
                   <div 
                     key={index} 
-                    className="relative flex items-center"
+                    className="relative"
                     style={{
                       opacity: timelineVisible[index] ? 1 : 0,
                       transform: `translateY(${timelineVisible[index] ? 0 : 50}px)`,
                       transition: 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
                     }}
                   >
-                    {/* Timeline Node */}
-                    <div className={`absolute ${
-                      'lg:left-1/2 lg:transform lg:-translate-x-1/2 left-8 transform -translate-x-1/2'
-                    } z-10`}>
+                    {/* Timeline Node - Center positioned on desktop, left on mobile */}
+                    <div className="absolute left-8 lg:left-1/2 transform -translate-x-1/2 z-10 top-8">
                       <div className={`
-                        w-12 h-12 sm:w-14 sm:h-14 rounded-full border-4 border-slate-800 
+                        w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full border-4 border-slate-800 
                         bg-gradient-to-br ${item.color} 
                         flex items-center justify-center shadow-xl
                         hover:scale-110 transition-transform duration-300
@@ -175,119 +173,30 @@ const Experience: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Content Card */}
-                    <div className={`
-                      w-full flex ${
-                        'lg:' + (isLeft ? 'justify-start pr-8' : 'justify-end pl-8')
-                      } justify-start pl-20 sm:pl-24
-                    `}>
-                      <div className={`
-                        w-full ${
-                          'lg:max-w-lg lg:' + (isLeft ? 'mr-12' : 'ml-12')
-                        }
-                      `}>
-                        <div className={`
-                          relative bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-lg 
-                          border border-slate-700/50 rounded-2xl p-6 sm:p-8 
-                          hover:from-slate-700/70 hover:to-slate-800/70 hover:border-slate-600/70 
-                          transition-all duration-500 transform hover:scale-105 
-                          ${
-                            'lg:' + (isLeft ? 'hover:-translate-x-2' : 'hover:translate-x-2')
-                          }
-                          group shadow-xl hover:shadow-2xl
-                        `}>
-                          {/* Card Arrow */}
-                          <div className={`
-                            hidden lg:block absolute top-8 ${isLeft ? '-right-4' : '-left-4'} 
-                            w-8 h-8 bg-gradient-to-br from-slate-800/60 to-slate-900/60 
-                            border-r border-b border-slate-700/50 
-                            transform rotate-45 group-hover:from-slate-700/70 group-hover:to-slate-800/70
-                            transition-colors duration-500
-                          `} />
-                          
-                          {/* Year Badge */}
-                          <div className={`
-                            absolute -top-3 sm:-top-4 ${
-                              'lg:' + (isLeft ? 'right-6' : 'left-6') + ' right-6'
-                            }
-                            px-3 sm:px-4 py-1 sm:py-2 text-sm font-bold text-white rounded-full
-                            bg-gradient-to-r ${item.color} shadow-lg
-                            hover:scale-110 transition-transform duration-300
-                          `}>
-                            {item.year}
+                    {/* Content Container */}
+                    <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-12">
+                      {/* Left Side Content (for even indices) */}
+                      <div className={`${isLeft ? 'lg:order-1' : 'lg:order-2'} ${!isLeft ? 'lg:text-right' : ''}`}>
+                        {isLeft && (
+                          <div className="pl-20 lg:pl-0 lg:pr-8 xl:pr-12">
+                            <ExperienceCard item={item} isLeft={isLeft} />
                           </div>
-
-                          {/* Content */}
-                          <div className="pt-4">
-                            {/* Header */}
-                            <div className="flex items-start justify-between mb-4">
-                              <div className="flex-1">
-                                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300">
-                                  {item.title}
-                                </h3>
-                                <div className="text-blue-400 font-semibold mb-3 group-hover:text-blue-300 transition-colors duration-300 text-base sm:text-lg">
-                                  {item.company}
-                                </div>
-                              </div>
-                              
-                              <span className="text-xs sm:text-sm px-3 py-1 rounded-full font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30 ml-3 whitespace-nowrap">
-                                {item.jobType}
-                              </span>
-                            </div>
-
-                            {/* Details */}
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-slate-400 text-sm mb-4">
-                              <span className="flex items-center gap-2 hover:text-slate-300 transition-colors duration-300">
-                                <Calendar size={14} />
-                                {item.period}
-                              </span>
-                              <span className="flex items-center gap-2 hover:text-slate-300 transition-colors duration-300">
-                                <MapPin size={14} />
-                                {item.location}
-                              </span>
-                            </div>
-
-                            {/* Description */}
-                            <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-sm sm:text-base mb-5">
-                              {item.description}
-                            </p>
-
-                            {/* Key Achievements */}
-                            <div className="mb-5">
-                              <h4 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
-                                <Trophy className="w-4 h-4" />
-                                Key Achievements
-                              </h4>
-                              <ul className="space-y-2">
-                                {item.achievements.map((achievement, achIndex) => (
-                                  <li key={achIndex} className="text-xs sm:text-sm text-slate-400 flex items-start gap-3">
-                                    <span className="text-green-400 mt-1 flex-shrink-0">✓</span>
-                                    <span className="group-hover:text-slate-300 transition-colors duration-300">{achievement}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            {/* Skills */}
-                            <div className="flex flex-wrap gap-2 mb-4">
-                              {item.skills.map((skill, skillIndex) => (
-                                <span
-                                  key={skillIndex}
-                                  className="px-3 py-1 text-xs sm:text-sm bg-slate-700/50 text-slate-300 rounded-full border border-slate-600/50 hover:bg-slate-600/60 hover:border-slate-500/70 transition-all duration-300 hover:scale-105"
-                                >
-                                  {skill}
-                                </span>
-                              ))}
-                            </div>
-
-                            {/* Hover Accent */}
-                            <div className={`
-                              w-0 h-1 bg-gradient-to-r ${item.color} mt-4 rounded-full
-                              group-hover:w-full transition-all duration-700
-                            `} />
-                          </div>
-                        </div>
+                        )}
                       </div>
+
+                      {/* Right Side Content (for odd indices) */}
+                      <div className={`${isLeft ? 'lg:order-2' : 'lg:order-1'} ${isLeft ? 'lg:text-left' : ''}`}>
+                        {!isLeft && (
+                          <div className="pl-20 lg:pl-8 xl:pl-12 lg:pr-0">
+                            <ExperienceCard item={item} isLeft={isLeft} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Mobile Layout - Always show on mobile */}
+                    <div className="lg:hidden pl-20">
+                      <ExperienceCard item={item} isLeft={true} />
                     </div>
                   </div>
                 );
@@ -406,6 +315,114 @@ const Experience: React.FC = () => {
         </div>
       </div>
     </section>
+  );
+};
+
+// Experience Card Component
+interface ExperienceCardProps {
+  item: any;
+  isLeft: boolean;
+}
+
+const ExperienceCard: React.FC<ExperienceCardProps> = ({ item, isLeft }) => {
+  return (
+    <div className={`
+      relative bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-lg 
+      border border-slate-700/50 rounded-2xl p-6 sm:p-8 
+      hover:from-slate-700/70 hover:to-slate-800/70 hover:border-slate-600/70 
+      transition-all duration-500 transform hover:scale-105 
+      group shadow-xl hover:shadow-2xl
+      ${isLeft ? 'lg:hover:-translate-x-2' : 'lg:hover:translate-x-2'}
+    `}>
+      {/* Card Arrow - Only visible on desktop */}
+      <div className={`
+        hidden lg:block absolute top-8 ${isLeft ? '-right-4' : '-left-4'} 
+        w-8 h-8 bg-gradient-to-br from-slate-800/60 to-slate-900/60 
+        border-r border-b border-slate-700/50 
+        transform rotate-45 group-hover:from-slate-700/70 group-hover:to-slate-800/70
+        transition-colors duration-500
+      `} />
+      
+      {/* Year Badge */}
+      <div className={`
+        absolute -top-3 sm:-top-4 ${isLeft ? 'lg:right-6 right-6' : 'lg:left-6 right-6'}
+        px-3 sm:px-4 py-1 sm:py-2 text-sm font-bold text-white rounded-full
+        bg-gradient-to-r ${item.color} shadow-lg
+        hover:scale-110 transition-transform duration-300
+      `}>
+        {item.year}
+      </div>
+
+      {/* Content */}
+      <div className="pt-4">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex-1">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-slate-300 transition-all duration-300">
+              {item.title}
+            </h3>
+            <div className="text-blue-400 font-semibold mb-3 group-hover:text-blue-300 transition-colors duration-300 text-base sm:text-lg">
+              {item.company}
+            </div>
+          </div>
+          
+          <span className="text-xs sm:text-sm px-3 py-1 rounded-full font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30 ml-3 whitespace-nowrap">
+            {item.jobType}
+          </span>
+        </div>
+
+        {/* Details */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-slate-400 text-sm mb-4">
+          <span className="flex items-center gap-2 hover:text-slate-300 transition-colors duration-300">
+            <Calendar size={14} />
+            {item.period}
+          </span>
+          <span className="flex items-center gap-2 hover:text-slate-300 transition-colors duration-300">
+            <MapPin size={14} />
+            {item.location}
+          </span>
+        </div>
+
+        {/* Description */}
+        <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors duration-300 text-sm sm:text-base mb-5">
+          {item.description}
+        </p>
+
+        {/* Key Achievements */}
+        <div className="mb-5">
+          <h4 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
+            <Trophy className="w-4 h-4" />
+            Key Achievements
+          </h4>
+          <ul className="space-y-2">
+            {item.achievements.map((achievement: string, achIndex: number) => (
+              <li key={achIndex} className="text-xs sm:text-sm text-slate-400 flex items-start gap-3">
+                <span className="text-green-400 mt-1 flex-shrink-0">✓</span>
+                <span className="group-hover:text-slate-300 transition-colors duration-300">{achievement}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Skills */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {item.skills.map((skill: string, skillIndex: number) => (
+            <span
+              key={skillIndex}
+              className="px-3 py-1 text-xs sm:text-sm bg-slate-700/50 text-slate-300 rounded-full border border-slate-600/50 hover:bg-slate-600/60 hover:border-slate-500/70 transition-all duration-300 hover:scale-105"
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+
+        {/* Hover Accent */}
+        <div className={`
+          w-0 h-1 bg-gradient-to-r ${item.color} mt-4 rounded-full
+          group-hover:w-full transition-all duration-700
+        `} />
+      </div>
+    </div>
   );
 };
 
