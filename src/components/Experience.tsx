@@ -100,15 +100,15 @@ const Experience: React.FC = () => {
       year: '2024 - Present',
       title: "SIG Head",
       organization: "IE NITK",
-      description: "Led technical initiatives, organizing coding competitions, and managed community workshops.",
+      description: "SIG Head at IE NITK(a technical club), leading technical initiatives, organizing coding competitions, and managing community workshops..",
       icon: <Trophy className="w-5 h-5 sm:w-6 sm:h-6" />,
       color: 'from-yellow-600 to-orange-600'
     },
     {
-      year: '2022',
-      title: "EDC Director",
-      organization: "Entrepreneurship Development Cell, BV(DU)COEP",
-      description: "Directed entrepreneurship initiatives and startup incubation programs for students.",
+      year: '2023 and 2024',
+      title: "HacktoberFest",
+      organization: "DigitalOcean",
+      description: "Contributed to open-source machine learning projects during Hacktoberfest, enhancing real-world ML solutions.",
       icon: <Target className="w-5 h-5 sm:w-6 sm:h-6" />,
       color: 'from-pink-600 to-rose-600'
     }
