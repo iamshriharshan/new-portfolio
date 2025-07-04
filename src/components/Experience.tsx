@@ -105,7 +105,8 @@ const Experience: React.FC = () => {
       color: 'from-yellow-600 to-orange-600'
     },
     {
-      year: '2023 and 2024',
+      year: '2023',
+      year: '2024'
       title: "HacktoberFest",
       organization: "DigitalOcean",
       description: "Contributed to open-source machine learning projects during Hacktoberfest, enhancing real-world ML solutions.",
