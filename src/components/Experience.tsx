@@ -81,9 +81,9 @@ const Experience: React.FC = () => {
 
   const achievements = [
     {
-      year: '2023',
+      year: '2024',
       title: "WHO Hall of Fame",
-      organization: "Google Developer Student Club",
+      organization: "World Health Organisation",
       description: "Recognized by the World Health Organization for reporting critical security vulnerabilities, contributing to global cybersecurity efforts.",
       icon: <Star className="w-5 h-5 sm:w-6 sm:h-6" />,
       color: 'from-green-600 to-emerald-600'
