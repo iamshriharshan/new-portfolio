@@ -90,17 +90,17 @@ const Experience: React.FC = () => {
     },
     {
       year: '2023',
-      title: "Community Volunteer",
-      organization: "Google Cloud Community Day",
-      description: "Volunteered at Google Cloud Community Day, supporting technical workshops and networking events.",
+      title: "Image Classification Hackathon Winner",
+      organization: "IEEE NITK",
+      description: "Won the Impulse hackathon for developing an innovative image classification solution using advanced machine learning techniques.",
       icon: <Award className="w-5 h-5 sm:w-6 sm:h-6" />,
       color: 'from-orange-600 to-red-600'
     },
     {
-      year: '2022-2023',
-      title: "Vice President",
-      organization: "GeeksforGeeks, BV(DU)COEP",
-      description: "Led technical initiatives, organized coding competitions, and managed community workshops.",
+      year: '2024 - Present',
+      title: "SIG Head",
+      organization: "IE NITK",
+      description: "Led technical initiatives, organizing coding competitions, and managed community workshops.",
       icon: <Trophy className="w-5 h-5 sm:w-6 sm:h-6" />,
       color: 'from-yellow-600 to-orange-600'
     },
