@@ -82,7 +82,7 @@ const Experience: React.FC = () => {
   const achievements = [
     {
       year: '2024',
-      title: "WHO Hall of Fame",
+      title: "Hall of Fame",
       organization: "World Health Organisation",
       description: "Recognized by the World Health Organization for reporting critical security vulnerabilities, contributing to global cybersecurity efforts.",
       icon: <Star className="w-5 h-5 sm:w-6 sm:h-6" />,
